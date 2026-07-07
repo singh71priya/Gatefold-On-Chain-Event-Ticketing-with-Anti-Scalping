@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: #F6F1E4;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(31,42,36,0.03) 40px);
+  }
+  ::selection {
+    background: rgba(196, 98, 45, 0.25);
+  }
+  *:focus-visible {
+    outline: 2px solid #C4622D;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .stub {
+    @apply bg-stub border border-line rounded-stub relative;
+  }
+  /* Perforated edge effect between ticket body and tear-off stub */
+  .stub-perforation {
+    background-image: radial-gradient(circle, #F6F1E4 2.5px, transparent 2.6px);
+    background-size: 14px 14px;
+    background-position: center;
+  }
+  .btn-primary {
+    @apply bg-accent text-paper font-semibold rounded-stub px-4 py-2.5 transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply bg-transparent border border-line text-ink font-medium rounded-stub px-4 py-2.5 transition-colors hover:border-accent/60 hover:text-accent disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wide px-2.5 py-1 rounded-full border;
+  }
+  .stamp {
+    @apply border-2 border-stamp text-stamp font-display tracking-widest uppercase inline-block px-3 py-1 rotate-[-4deg];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
