@@ -73,9 +73,9 @@ export class FactoryClient {
       nativeToScVal(token, { type: 'address' }),
       nativeToScVal(registry, { type: 'address' }),
       nativeToScVal(BigInt(faceValue), { type: 'i128' }),
-      nativeToScVal(totalTickets, { type: 'u32' }),
-      nativeToScVal(maxResaleBps, { type: 'u32' }),
-      nativeToScVal(royaltyBps, { type: 'u32' }),
+      nativeToScVal(Number(totalTickets), { type: 'u32' }),
+      nativeToScVal(Number(maxResaleBps), { type: 'u32' }),
+      nativeToScVal(Number(royaltyBps), { type: 'u32' }),
     ];
     return this.invoke('create_event', args, organizer, signTransaction);
   }
