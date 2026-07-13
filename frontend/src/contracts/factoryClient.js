@@ -49,7 +49,18 @@ export class FactoryClient {
       throw new Error(`Transaction submission failed: ${JSON.stringify(sendResponse.errorResult)}`);
     }
 
-    return this._pollTransaction(sendResponse.hash);
+    const result = await this._pollTransaction(sendResponse.hash);
+
+    let returnValue = null;
+    if (simulated.result?.retval) {
+      try {
+        returnValue = scValToNative(simulated.result.retval);
+      } catch (e) {
+        console.error('Failed to parse return value', e);
+      }
+    }
+
+    return { ...result, returnValue };
   }
 
   async _pollTransaction(hash, attempts = 15) {

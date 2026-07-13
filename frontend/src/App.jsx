@@ -47,7 +47,7 @@ export default function App() {
     setError(null);
     setCreatingEvent(true);
     try {
-      const { hash } = await factoryClient.createEvent(
+      const { hash, returnValue } = await factoryClient.createEvent(
         wallet.address,
         name,
         CONTRACTS.TOKEN_CONTRACT_ID,
@@ -58,7 +58,19 @@ export default function App() {
         royaltyBps,
         wallet.signTransaction
       );
-      setSuccess(`Event published on-chain. Transaction: ${hash}`);
+      setSuccess(
+        <span>
+          Event published! Event ID: <strong>{returnValue?.toString() || 'Unknown'}</strong>. <br />
+          <a
+            href={`https://stellar.expert/explorer/testnet/tx/${hash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            View transaction on Stellar Expert
+          </a>
+        </span>
+      );
     } catch (err) {
       setError(`Failed to publish event: ${err.message}`);
     } finally {
