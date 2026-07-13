@@ -28,10 +28,35 @@ export function useWallet() {
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState(null);
 
+  const [balance, setBalance] = useState(null);
+
+  const refreshBalance = useCallback(async () => {
+    if (!address) {
+      setBalance(null);
+      return;
+    }
+    try {
+      const response = await fetch(`${NETWORK.horizonUrl}/accounts/${address}`);
+      if (!response.ok) return;
+      const data = await response.json();
+      const native = data.balances.find((b) => b.asset_type === 'native');
+      if (native) setBalance(Number(native.balance).toFixed(2));
+    } catch (err) {
+      console.error('Failed to fetch balance', err);
+    }
+  }, [address]);
+
   useEffect(() => {
     const saved = localStorage.getItem('gatefold:lastAddress');
     if (saved) setAddress(saved);
   }, []);
+
+  useEffect(() => {
+    refreshBalance();
+    // Refresh periodically just in case
+    const interval = setInterval(refreshBalance, 30000);
+    return () => clearInterval(interval);
+  }, [address, refreshBalance]);
 
   const connect = useCallback(async () => {
     setConnecting(true);
@@ -55,6 +80,7 @@ export function useWallet() {
 
   const disconnect = useCallback(() => {
     setAddress(null);
+    setBalance(null);
     localStorage.removeItem('gatefold:lastAddress');
   }, []);
 
@@ -67,5 +93,5 @@ export function useWallet() {
     return signedTxXdr;
   }, [address]);
 
-  return { address, connecting, error, connect, disconnect, signTransaction, isConnected: !!address };
+  return { address, balance, connecting, error, connect, disconnect, signTransaction, refreshBalance, isConnected: !!address };
 }

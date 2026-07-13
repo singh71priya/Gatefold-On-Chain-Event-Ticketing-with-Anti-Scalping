@@ -71,6 +71,7 @@ export default function App() {
           </a>
         </span>
       );
+      wallet.refreshBalance();
     } catch (err) {
       setError(`Failed to publish event: ${err.message}`);
     } finally {
@@ -86,12 +87,28 @@ export default function App() {
     setError(null);
     setActionLoading(true);
     try {
-      const { hash } = await factoryClient.mintTicket(eventId, wallet.address, wallet.signTransaction);
+      const { hash, returnValue } = await factoryClient.mintTicket(eventId, wallet.address, wallet.signTransaction);
       const ev = await factoryClient.getEvent(eventId, wallet.address);
       const maxResalePrice = (Number(ev.face_value) * 11000) / 10000; // display estimate; registry has the source of truth
-      setTicket({ ticketIdDisplay: ev.tickets_minted - 1, owner: wallet.address, maxResalePrice });
+      
+      const mintedTicketId = returnValue !== null ? returnValue.toString() : (ev.tickets_minted - 1).toString();
+      
+      setTicket({ ticketIdDisplay: mintedTicketId, owner: wallet.address, maxResalePrice });
       setEvent(ev);
-      setSuccess(`Ticket minted. Transaction: ${hash}`);
+      setSuccess(
+        <span>
+          Ticket minted! Ticket ID: <strong>{mintedTicketId}</strong>. <br />
+          <a
+            href={`https://stellar.expert/explorer/testnet/tx/${hash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            View transaction on Stellar Expert
+          </a>
+        </span>
+      );
+      wallet.refreshBalance();
     } catch (err) {
       setError(`Mint failed: ${err.message}`);
     } finally {
@@ -104,7 +121,20 @@ export default function App() {
     setActionLoading(true);
     try {
       const { hash } = await factoryClient.resellTicket(eventId, ticketId, buyer, Number(price), wallet.signTransaction);
-      setSuccess(`Ticket resold. Transaction: ${hash}`);
+      setSuccess(
+        <span>
+          Ticket resold successfully! <br />
+          <a
+            href={`https://stellar.expert/explorer/testnet/tx/${hash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            View transaction on Stellar Expert
+          </a>
+        </span>
+      );
+      wallet.refreshBalance();
     } catch (err) {
       setError(`Resale failed — the price may exceed the organizer's cap. (${err.message})`);
     } finally {
@@ -116,6 +146,7 @@ export default function App() {
     setActionLoading(true);
     try {
       await factoryClient.verifyEntry(eventId, ticketId, wallet.address, wallet.signTransaction);
+      wallet.refreshBalance();
     } finally {
       setActionLoading(false);
     }
