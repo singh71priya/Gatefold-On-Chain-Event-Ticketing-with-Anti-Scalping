@@ -24,7 +24,7 @@ describe('CreateEventForm', () => {
     expect(onCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Jazz Night',
-        faceValue: 200,
+        faceValue: 2000000000, // 200 XLM × 10,000,000 stroops
         totalTickets: 30,
         maxResaleBps: 11000,
         royaltyBps: 500,
