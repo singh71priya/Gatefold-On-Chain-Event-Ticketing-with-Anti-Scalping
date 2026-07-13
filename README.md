@@ -7,7 +7,6 @@
 
 [![Stellar](https://img.shields.io/badge/Stellar-Soroban-blue.svg)](https://stellar.org/soroban)
 [![Vite](https://img.shields.io/badge/Frontend-Vite_React-purple.svg)](https://vitejs.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black.svg?logo=vercel)](https://gatefold-on-chain-event-ticketing-w.vercel.app/)
 [![Video Demo](https://img.shields.io/badge/Video%20Demo-Google%20Drive-red.svg?logo=google-drive)](https://drive.google.com/file/d/1UdzMM3J4gPRDqZPVe34DyGF73d3lRZPT/view?usp=sharing)
 
@@ -26,20 +25,35 @@
 
 ---
 
+## 🚀 Smart Contract Deployment (Stellar Testnet)
+
+The smart contracts are live and deployed to the **Stellar Testnet** via automated CI/CD (GitHub Actions). All contract interactions use the native **XLM** token.
+
+| Contract | Contract ID | Explorer |
+|---|---|---|
+| 🏭 **Factory** | `CAMDA6P4RNBY3YDYOSHE3XNMANM55I2LGW2U4DLJFLB3N6VKUFRPUQ3I` | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CAMDA6P4RNBY3YDYOSHE3XNMANM55I2LGW2U4DLJFLB3N6VKUFRPUQ3I) |
+| 📋 **Registry** | `CD3X7LYOHFUVMLCIQYNSIIU6JOMHOSZDXMPRO46AO4BYQRGQ3EOKNDQU` | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CD3X7LYOHFUVMLCIQYNSIIU6JOMHOSZDXMPRO46AO4BYQRGQ3EOKNDQU) |
+| 💰 **Token (XLM)** | `CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC` | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC) |
+
+**Network:** Stellar Testnet (Test SDF Network ; September 2015)  
+**RPC URL:** `https://soroban-testnet.stellar.org`  
+**Horizon URL:** `https://horizon-testnet.stellar.org`  
+
+> The contracts are automatically redeployed on every push to `master` via the [Deploy to Testnet](.github/workflows/deploy.yml) GitHub Actions workflow.
+
+---
+
 ## 📸 Application Showcase
 
 ### 1. The Ticketing dApp (Mobile Responsive)
-*The platform is fully mobile responsive, allowing attendees to show their ticket QR codes right at the door.*
 
 ![Mobile Responsive UI](screenshots/mobile_ui.png)
 
 ### 2. Automated Deployments (CI/CD)
-*Smart contracts and the React frontend are automatically compiled and deployed to the Testnet via GitHub Actions.*
 
 ![CI/CD Pipeline](screenshots/cicd.png)
 
 ### 3. Smart Contract Test Coverage
-*The Soroban smart contracts feature rigorous unit testing to ensure bulletproof anti-scalping execution.*
 
 ![Test Output](screenshots/tests.png)
 
@@ -74,10 +88,4 @@ This project is split into three main components:
 cd frontend
 npm install
 npm run dev
-```
-
-### Running Smart Contract Tests
-Navigate to the root directory and run the Cargo test suite:
-```bash
-cargo test --workspace
 ```
