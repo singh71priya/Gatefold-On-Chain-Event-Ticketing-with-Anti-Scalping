@@ -13,7 +13,7 @@
 
 #![no_std]
 
-use soroban_sdk::{contract, contracterror, contractevent, contractimpl, contracttype, Address, Env, Vec};
+use soroban_sdk::{contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env, Vec};
 
 #[contracttype]
 #[derive(Clone)]
@@ -53,22 +53,19 @@ pub enum RegistryError {
     InvalidBps = 6,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct PolicyRegistered {
-    #[topic]
     pub event_id: u64,
     pub organizer: Address,
     pub face_value: i128,
     pub max_resale_bps: u32,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct TicketResold {
-    #[topic]
     pub event_id: u64,
-    #[topic]
     pub ticket_id: u64,
     pub seller: Address,
     pub buyer: Address,
@@ -108,7 +105,10 @@ impl ResaleRegistryContract {
         let policy = EventPolicy { organizer: organizer.clone(), face_value, max_resale_bps, royalty_bps };
         env.storage().persistent().set(&DataKey::Policy(event_id), &policy);
 
-        PolicyRegistered { event_id, organizer, face_value, max_resale_bps }.publish(&env);
+        env.events().publish(
+            (symbol_short!("PolicyReg"), event_id),
+            PolicyRegistered { event_id, organizer, face_value, max_resale_bps },
+        );
         Ok(())
     }
 
@@ -155,7 +155,10 @@ impl ResaleRegistryContract {
         });
         env.storage().persistent().set(&key, &history);
 
-        TicketResold { event_id, ticket_id, seller, buyer, sale_price, royalty_paid }.publish(&env);
+        env.events().publish(
+            (symbol_short!("TicketRes"), event_id, ticket_id),
+            TicketResold { event_id, ticket_id, seller, buyer, sale_price, royalty_paid },
+        );
         Ok(royalty_paid)
     }
 

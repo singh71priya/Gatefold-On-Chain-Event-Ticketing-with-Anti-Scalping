@@ -9,11 +9,11 @@
 
 #![no_std]
 
-use soroban_sdk::{contract, contracterror, contractevent, contractimpl, contracttype, token, Address, Env, String};
+use soroban_sdk::{contract, contracterror, contractimpl, contracttype, symbol_short, token, Address, Env, String};
 
 mod registry {
     soroban_sdk::contractimport!(
-        file = "../registry/target/wasm32-unknown-unknown/release/resale_registry.wasm"
+        file = "../../target/wasm32-unknown-unknown/release/resale_registry.wasm"
     );
 }
 
@@ -57,32 +57,27 @@ pub enum FactoryError {
     NotTicketOwner = 6,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct EventCreated {
-    #[topic]
     pub event_id: u64,
     pub organizer: Address,
     pub face_value: i128,
     pub total_tickets: u32,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct TicketMinted {
-    #[topic]
     pub event_id: u64,
-    #[topic]
     pub ticket_id: u64,
     pub owner: Address,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct TicketResold {
-    #[topic]
     pub event_id: u64,
-    #[topic]
     pub ticket_id: u64,
     pub seller: Address,
     pub buyer: Address,
@@ -90,12 +85,10 @@ pub struct TicketResold {
     pub royalty_paid: i128,
 }
 
-#[contractevent]
+#[contracttype]
 #[derive(Clone, Debug)]
 pub struct EntryVerified {
-    #[topic]
     pub event_id: u64,
-    #[topic]
     pub ticket_id: u64,
     pub attendee: Address,
 }
@@ -138,7 +131,10 @@ impl TicketFactoryContract {
         let registry_client = registry::Client::new(&env, &registry);
         registry_client.register_policy(&organizer, &event_id, &face_value, &max_resale_bps, &royalty_bps);
 
-        EventCreated { event_id, organizer, face_value, total_tickets }.publish(&env);
+        env.events().publish(
+            (symbol_short!("EventCre"), event_id),
+            EventCreated { event_id, organizer, face_value, total_tickets },
+        );
         Ok(event_id)
     }
 
@@ -161,7 +157,10 @@ impl TicketFactoryContract {
         event.tickets_minted += 1;
         env.storage().persistent().set(&DataKey::Event(event_id), &event);
 
-        TicketMinted { event_id, ticket_id, owner: buyer }.publish(&env);
+        env.events().publish(
+            (symbol_short!("TicketMin"), event_id, ticket_id),
+            TicketMinted { event_id, ticket_id, owner: buyer },
+        );
         Ok(ticket_id)
     }
 
@@ -195,7 +194,10 @@ impl TicketFactoryContract {
         ticket.owner = buyer.clone();
         env.storage().persistent().set(&DataKey::Ticket(event_id, ticket_id), &ticket);
 
-        TicketResold { event_id, ticket_id, seller, buyer, sale_price, royalty_paid: royalty }.publish(&env);
+        env.events().publish(
+            (symbol_short!("TicketRes"), event_id, ticket_id),
+            TicketResold { event_id, ticket_id, seller, buyer, sale_price, royalty_paid: royalty },
+        );
         Ok(())
     }
 
@@ -215,7 +217,10 @@ impl TicketFactoryContract {
         let attendee = ticket.owner.clone();
         env.storage().persistent().set(&DataKey::Ticket(event_id, ticket_id), &ticket);
 
-        EntryVerified { event_id, ticket_id, attendee }.publish(&env);
+        env.events().publish(
+            (symbol_short!("EntryVer"), event_id, ticket_id),
+            EntryVerified { event_id, ticket_id, attendee },
+        );
         Ok(())
     }
 
