@@ -120,7 +120,8 @@ export default function App() {
     setError(null);
     setActionLoading(true);
     try {
-      const { hash } = await factoryClient.resellTicket(eventId, ticketId, buyer, Number(price), wallet.signTransaction);
+      const priceStroops = Math.round(Number(price) * 10000000); // XLM to stroops
+      const { hash } = await factoryClient.resellTicket(eventId, ticketId, buyer, priceStroops, wallet.signTransaction);
       setSuccess(
         <span>
           Ticket resold successfully! <br />

@@ -16,7 +16,7 @@ export default function CreateEventForm({ onCreate, loading }) {
         e.preventDefault();
         onCreate({
           name,
-          faceValue: Number(faceValue),
+          faceValue: Math.round(Number(faceValue) * 10000000), // convert XLM to stroops (7 decimals)
           totalTickets: Number(totalTickets),
           maxResaleBps: Math.round(Number(maxResalePct) * 100),
           royaltyBps: Math.round(Number(royaltyPct) * 100),

@@ -32,7 +32,7 @@ export default function BoxOffice({ wallet, onLookupEvent, onMint, onResell, eve
           <h3 className="font-display text-xl tracking-wide">{event.name}</h3>
           <dl className="grid grid-cols-2 gap-y-1 text-sm">
             <dt className="text-ink/50">Face value</dt>
-            <dd className="font-mono text-right">{Number(event.face_value).toLocaleString()}</dd>
+            <dd className="font-mono text-right">{Number(event.face_value) / 10000000} XLM</dd>
             <dt className="text-ink/50">Minted</dt>
             <dd className="font-mono text-right">
               {event.tickets_minted} / {event.total_tickets}
@@ -54,13 +54,13 @@ export default function BoxOffice({ wallet, onLookupEvent, onMint, onResell, eve
             eventName={event?.name}
             ticketId={ticket.ticketIdDisplay}
             owner={ticket.owner}
-            faceValue={Number(event?.face_value)}
-            maxResalePrice={ticket.maxResalePrice}
+            faceValue={Number(event?.face_value) / 10000000}
+            maxResalePrice={ticket.maxResalePrice / 10000000}
           />
           <div className="stub p-5 sm:p-6 flex flex-col sm:flex-row gap-6 items-center">
             <TicketQRCode eventId={eventId} ticketId={ticket.ticketIdDisplay} />
             <div className="flex-1 w-full space-y-2">
-              <p className="text-xs text-ink/50">Resell this ticket (capped at {ticket.maxResalePrice?.toLocaleString()} tokens)</p>
+              <p className="text-xs text-ink/50">Resell this ticket (capped at {ticket.maxResalePrice / 10000000} XLM)</p>
               <div className="flex gap-2">
                 <input
                   value={resaleBuyer}
