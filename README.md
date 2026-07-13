@@ -52,17 +52,21 @@ The smart contracts are live and deployed to the **Stellar Testnet** via automat
 
 ## 📸 Application Showcase
 
-### 1. The Ticketing dApp (Mobile Responsive)
+### 1. Product UI Overview
 
-![Mobile Responsive UI](screenshots/mobile_ui.png)
+![Product UI](images/product_UI.png)
+
+### 2. The Ticketing dApp (Mobile Responsive)
+
+![Mobile Responsive UI](images/mobile_responsive_UI.png)
 
 ### 2. Automated Deployments (CI/CD)
 
-![CI/CD Pipeline](screenshots/cicd.png)
+![CI/CD Pipeline](images/CICD.png)
 
 ### 3. Smart Contract Test Coverage
 
-![Test Output](screenshots/tests.png)
+![Test Output](images/test_OUTPUT.png)
 
 ---
 
