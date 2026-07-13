@@ -39,6 +39,13 @@ The smart contracts are live and deployed to the **Stellar Testnet** via automat
 **RPC URL:** `https://soroban-testnet.stellar.org`  
 **Horizon URL:** `https://horizon-testnet.stellar.org`  
 
+### 🔗 Sample On-Chain Transactions
+
+| Action | Transaction Hash | Explorer |
+|---|---|---|
+| 🎫 Ticket Minted | `69e38172597dc751b1a00faea2ef78c41f59fcc72aef0e292fee761e46a1c845` | [View](https://stellar.expert/explorer/testnet/tx/69e38172597dc751b1a00faea2ef78c41f59fcc72aef0e292fee761e46a1c845) |
+| ✅ Check-in Verified | `ae7ccd92475777525a61c9398594fab5fdaa99bd48019369557d8899d954bb1c` | [View](https://stellar.expert/explorer/testnet/tx/ae7ccd92475777525a61c9398594fab5fdaa99bd48019369557d8899d954bb1c) |
+
 > The contracts are automatically redeployed on every push to `master` via the [Deploy to Testnet](.github/workflows/deploy.yml) GitHub Actions workflow.
 
 ---
